@@ -1,6 +1,8 @@
 import { db } from "@/utils/db";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
+// Page with form for adding a new post
 export default async function NewPostsPage() {
   const categories = (await db.query(`SELECT * FROM categories`)).rows;
 
@@ -20,20 +22,31 @@ export default async function NewPostsPage() {
   }
 
   return (
-    <div>
-      <h2>This is the page for the form to create a new post</h2>
-      <h2>Add New Post</h2>
-      <form action={handleAddPost}>
-        <label htmlFor="title">Title</label>
+    <div className="flex flex-col items-center justify-center h-full pb-8">
+      <h2 className="mb-8 text-4xl font-bold text-myblack">Add a New Post</h2>
+      <form
+        action={handleAddPost}
+        className="w-4/5 flex flex-col rounded-3xl bg-myblack px-10 py-5 text-2xl md:text-3xl"
+      >
+        <label htmlFor="title" className="pb-2 text-myblue">
+          Title
+        </label>
         <input
           type="text"
           id="title"
           name="title"
           placeholder="Title of your post"
+          className="mb-4 px-2 py-1 border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
         />
-        <label htmlFor="category">Category</label>
-        <select name="category" id="category">
-          <option value="">--Choose a Category--</option>
+        <label htmlFor="category" className="pb-2 text-myblue">
+          Category
+        </label>
+        <select
+          name="category"
+          id="category"
+          className="mb-4 px-2 py-1 text-myblack border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
+        >
+          <option value="">-- Choose a Category --</option>
           {categories.map((category) => {
             return (
               <option key={category.id} value={category.id}>
@@ -42,14 +55,26 @@ export default async function NewPostsPage() {
             );
           })}
         </select>
-        <label htmlFor="content">What&apos;s your hack?</label>
+        <label htmlFor="content" className="pb-2 text-myblue">
+          What&apos;s your hack?
+        </label>
         <textarea
           name="content"
           id="content"
           placeholder="Enter your life hack here!"
+          rows="10"
+          className="border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
         ></textarea>
-        <button>Submit Life Hack</button>
+        <button className="bg-mygrey text-myblack rounded-full border-2 mt-10 mb-5 px-2 py-2 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 hover:font-semibold focus:outline-none focus:ring-0 focus:border-mypink/75">
+          Submit Life Hack
+        </button>
       </form>
+      <Link
+        href={`/posts`}
+        className="mt-4 font-semibold hover:underline hover:text-mypink"
+      >
+        Go Back
+      </Link>
     </div>
   );
 }
