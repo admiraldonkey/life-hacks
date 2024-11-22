@@ -1,5 +1,6 @@
 import { db } from "@/utils/db";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function EditIndividualPost({ params }) {
   const id = (await params).postid;
@@ -7,8 +8,6 @@ export default async function EditIndividualPost({ params }) {
 
   const response = await db.query(`SELECT * FROM posts WHERE id = ${id}`);
   const post = response.rows;
-  //   await console.log(post[0].id);
-  //   formData.set("title", post[0].title);
 
   async function handleUpdatePost(formData) {
     "use server";
@@ -23,20 +22,30 @@ export default async function EditIndividualPost({ params }) {
   }
 
   return (
-    <div>
-      <form action={handleUpdatePost}>
-        <label htmlFor="title">Title</label>
+    <div className="flex flex-col items-center justify-center h-full pb-8">
+      <h2 className="mb-8 text-4xl font-bold text-myblack">Edit Post</h2>
+      <form
+        action={handleUpdatePost}
+        className="w-4/5 flex flex-col rounded-3xl bg-myblack px-10 py-5 text-2xl md:text-3xl"
+      >
+        <label htmlFor="title" className="pb-2 text-myblue">
+          Title
+        </label>
         <input
           type="text"
           id="title"
           name="title"
           defaultValue={post[0].title}
+          className="mb-4 px-2 py-1 border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
         />
-        <label htmlFor="category">Category</label>
+        <label htmlFor="category" className="pb-2 text-myblue">
+          Category
+        </label>
         <select
           name="category"
           id="category"
           defaultValue={post[0].category_id}
+          className="mb-4 px-2 py-1 text-myblack border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
         >
           <option value="">--Choose a Category--</option>
           {categories.map((category) => {
@@ -47,14 +56,27 @@ export default async function EditIndividualPost({ params }) {
             );
           })}
         </select>
-        <label htmlFor="content">What&apos;s your hack?</label>
+        <label htmlFor="content" className="pb-2 text-myblue">
+          What&apos;s your hack?
+        </label>
         <textarea
           name="content"
           id="content"
+          placeholder="Enter your life hack here!"
           defaultValue={post[0].content}
+          rows="10"
+          className="border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
         ></textarea>
-        <button>Update Life Hack</button>
+        <button className="bg-mygrey text-myblack rounded-full border-2 mt-10 mb-5 px-2 py-2 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 hover:font-semibold focus:outline-none focus:ring-0 focus:border-mypink/75">
+          Update Life Hack
+        </button>
       </form>
+      <Link
+        href={`/posts/${id}`}
+        className="mt-4 font-semibold hover:underline hover:text-mypink"
+      >
+        Go Back
+      </Link>
     </div>
   );
 }
