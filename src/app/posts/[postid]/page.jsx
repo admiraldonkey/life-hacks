@@ -22,6 +22,8 @@ export default async function IndividualPostPage({ params }) {
     `SELECT * FROM comments WHERE post_id = ${postId}`
   );
   const comments = commentsResult.rows;
+  // Ensures comments don't get pushed to the bottom once updated (incase it is referenced by another comment)
+  comments.sort((a, b) => a.id - b.id);
 
   async function handleAddComment(formData) {
     "use server";
