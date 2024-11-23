@@ -79,7 +79,7 @@ export default async function IndividualPostPage({ params }) {
                     Edit Post
                   </Link>
                   <form action={handleDeletePost}>
-                    <button className="bg-mygrey text-myblack rounded-xl md:rounded-lg px-1 sm:px-2 py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 text-center h-min">
+                    <button className="bg-mygrey text-myblack rounded-xl md:rounded-lg px-1 sm:px-2 py-1 hover:bg-mypink hover:shadow-lg hover:shadow-mypink/50 text-center h-min">
                       Delete Post
                     </button>
                   </form>
