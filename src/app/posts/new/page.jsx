@@ -15,7 +15,7 @@ export default async function NewPostsPage() {
     const category = formData.get("category");
     const user = "Jamie";
     // Only posts if user has selected a category. Couldn't figure out how to easily get it to notify user of this
-    if (!category) {
+    if (!category || !title || !content) {
       console.log("error");
     } else {
       await db.query(
@@ -43,6 +43,7 @@ export default async function NewPostsPage() {
           name="title"
           placeholder="Title of your post"
           className="mb-4 px-2 py-1 border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
+          required
         />
         <label htmlFor="category" className="pb-2 text-myblue">
           Category
@@ -52,6 +53,7 @@ export default async function NewPostsPage() {
           name="category"
           id="category"
           className="mb-4 px-2 py-1 text-myblack border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
+          required
         >
           <option value="">-- Choose a Category --</option>
           {categories.map((category) => {
@@ -71,6 +73,7 @@ export default async function NewPostsPage() {
           placeholder="Enter your life hack here!"
           rows="10"
           className="border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
+          required
         ></textarea>
         <button className="bg-mygrey text-myblack rounded-full border-2 mt-10 mb-5 px-2 py-2 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 hover:font-semibold hover:border-myblue focus:outline-none focus:ring-0 focus:border-mypink/75">
           Submit Life Hack

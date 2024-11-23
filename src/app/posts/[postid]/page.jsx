@@ -138,6 +138,7 @@ export default async function IndividualPostPage({ params }) {
             name="title"
             placeholder="Title of your post"
             className="px-2 py-1 border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
+            required
           />
           <label
             htmlFor="content"
@@ -151,6 +152,7 @@ export default async function IndividualPostPage({ params }) {
             placeholder="Enter your comment"
             className="px-2 py-1 border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
             rows="5"
+            required
           ></textarea>
           <div className="flex justify-center">
             <button className="bg-mygrey text-myblack rounded-full border-2 mt-4 px-4 py-2 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 focus:outline-none focus:ring-0 focus:border-mypink/75">

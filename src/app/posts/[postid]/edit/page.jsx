@@ -19,7 +19,7 @@ export default async function EditIndividualPost({ params }) {
     const category = formData.get("category");
     const content = formData.get("content");
     // Only updates the post if user has selected a category. Couldn't figure out how to easily get it to notify user of this
-    if (!category) {
+    if (!category || !title || !content) {
       console.log("error");
     } else {
       await db.query(
@@ -48,6 +48,7 @@ export default async function EditIndividualPost({ params }) {
           name="title"
           defaultValue={post[0].title}
           className="mb-4 px-2 py-1 border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
+          required
         />
         <label htmlFor="category" className="pb-2 text-myblue">
           Category
@@ -58,6 +59,7 @@ export default async function EditIndividualPost({ params }) {
           id="category"
           defaultValue={post[0].category_id}
           className="mb-4 px-2 py-1 text-myblack border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
+          required
         >
           <option value="">--Choose a Category--</option>
           {categories.map((category) => {
@@ -78,6 +80,7 @@ export default async function EditIndividualPost({ params }) {
           defaultValue={post[0].content}
           rows="10"
           className="border-2 focus:outline-none focus:ring-0 focus:border-mypink/75"
+          required
         ></textarea>
         <button className="bg-mygrey text-myblack rounded-full border-2 mt-10 mb-5 px-2 py-2 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 hover:font-semibold hover:border-myblue focus:outline-none focus:ring-0 focus:border-mypink/75">
           Update Life Hack
