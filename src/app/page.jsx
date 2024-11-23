@@ -15,12 +15,18 @@ export default function HomePage() {
           Because you deserve <span className="text-mypink italic">better</span>
         </h4>
         <div className="flex flex-col sm:flex-row justify-around mt-10">
-          <button className="bg-mygrey text-myblack font-semibold text-3xl rounded-full px-4 py-2 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 mb-8 sm:mb-0">
-            <Link href="/posts">View Hacks</Link>
-          </button>
-          <button className="bg-mygrey text-myblack font-semibold text-3xl rounded-full px-4 py-2 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50">
-            <Link href="/posts/new">Post Hack</Link>
-          </button>
+          <Link
+            href="/posts"
+            className="px-4 py-2 bg-mygrey text-myblack font-semibold text-3xl rounded-full hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 mb-8 sm:mb-0"
+          >
+            View Hacks
+          </Link>
+          <Link
+            href="/posts/new"
+            className="px-4 py-2 bg-mygrey text-myblack font-semibold text-3xl rounded-full hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50"
+          >
+            Post Hack
+          </Link>
         </div>
       </div>
     </div>

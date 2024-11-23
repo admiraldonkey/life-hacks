@@ -41,18 +41,27 @@ export default async function IndividualCategoryPage({ params, searchParams }) {
       <div className="flex mt-5 justify-around py-2">
         <div className="flex">
           {/* Sort posts by ascending or descending */}
-          <h2 className="content-center mr-6 font-semibold">Sort posts by:</h2>
-          <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 mr-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
-            <Link href={`${id}?sort=asc`}>Ascending</Link>
-          </button>
-          <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
-            <Link href={`${id}?sort=desc`}>Descending</Link>
-          </button>
+          <h2 className="content-center mr-6 font-semibold">Sort by:</h2>
+          <Link
+            href={`${id}?sort=asc`}
+            className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 mr-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack text-center"
+          >
+            Oldest First
+          </Link>
+          <Link
+            href={`${id}?sort=desc`}
+            className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack text-center"
+          >
+            Newest First
+          </Link>
         </div>
         {/* Create a new post */}
-        <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
-          <Link href="../new">Create New Post</Link>
-        </button>
+        <Link
+          href="../new"
+          className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack text-center"
+        >
+          Create New Post
+        </Link>
       </div>
       {/* Map through each post in posts array and render to screen with alternating design */}
       <div className="flex flex-col items-center">
@@ -66,9 +75,12 @@ export default async function IndividualCategoryPage({ params, searchParams }) {
                 <h3 className="text-myblue text-2xl sm:text-3xl md:text-4xl font-semibold order-last md:order-first">
                   {post.title}
                 </h3>
-                <button className="bg-mygrey text-myblack rounded-xl md:rounded-full px-2 md:py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 md:order-first mb-2 md:mb-0 max-w-fit">
-                  <Link href={`../${post.id}`}>View Post</Link>
-                </button>
+                <Link
+                  href={`../${post.id}`}
+                  className="bg-mygrey text-myblack rounded-xl md:rounded-full px-2 md:py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 md:order-first mb-2 md:mb-0 max-w-fit text-center"
+                >
+                  View Post
+                </Link>
               </div>
               <p className="text-mygrey">{post.content}</p>
               <div className="text-mypink text-right">

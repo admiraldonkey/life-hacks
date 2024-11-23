@@ -72,11 +72,14 @@ export default async function IndividualPostPage({ params }) {
                 </h3>
                 {/* CRUD option buttions for post */}
                 <div className="flex md:order-first mb-2 md:mb-0 max-w-fit">
-                  <button className="bg-mygrey text-myblack rounded-xl md:rounded-full px-1 sm:px-2 py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 mr-5">
-                    <Link href={`/posts/${postId}/edit`}>Edit Post</Link>
-                  </button>
+                  <Link
+                    href={`/posts/${postId}/edit`}
+                    className="bg-mygrey text-myblack rounded-xl md:rounded-lg px-1 sm:px-2 py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 mr-5 text-center h-min"
+                  >
+                    Edit Post
+                  </Link>
                   <form action={handleDeletePost}>
-                    <button className="bg-mygrey text-myblack rounded-xl md:rounded-full px-1 sm:px-2 py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50">
+                    <button className="bg-mygrey text-myblack rounded-xl md:rounded-lg px-1 sm:px-2 py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 text-center h-min">
                       Delete Post
                     </button>
                   </form>
@@ -106,11 +109,12 @@ export default async function IndividualPostPage({ params }) {
                   <h3 className="text-myblue font-semibold order-last md:order-first">
                     {comment.title}
                   </h3>
-                  <button className="bg-mygrey text-myblack rounded-full px-2 py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 md:order-first mb-2 md:mb-0 max-w-fit">
-                    <Link href={`${postId}/comments/${comment.id}`}>
-                      Edit Comment
-                    </Link>
-                  </button>
+                  <Link
+                    href={`${postId}/comments/${comment.id}`}
+                    className="bg-mygrey text-myblack rounded-full px-2 py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 md:order-first mb-2 md:mb-0 max-w-fit text-center"
+                  >
+                    Edit Comment
+                  </Link>
                 </div>
                 <p className="text-mygrey">{comment.content}</p>
               </div>
