@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 export default async function IndividualPostPage({ params }) {
   const postId = (await params).postid;
 
+  // Retrieves data about the post from database, including the name of associated category
   const postResult = await db.query(`
     SELECT
       posts.id, 
@@ -19,13 +20,16 @@ export default async function IndividualPostPage({ params }) {
     WHERE posts.id = ${postId}`);
   const post = postResult.rows;
 
+  // Retrieves all comments associated with the specific post from the database
   const commentsResult = await db.query(
     `SELECT * FROM comments WHERE post_id = ${postId}`
   );
   const comments = commentsResult.rows;
+
   // Ensures comments don't get pushed to the bottom once updated (incase it is referenced by another comment)
   comments.sort((a, b) => a.id - b.id);
 
+  // Posts the comment to the databse using current field values
   async function handleAddComment(formData) {
     "use server";
     const title = formData.get("title");
@@ -36,23 +40,29 @@ export default async function IndividualPostPage({ params }) {
       `INSERT INTO comments (title, content, user_id, post_id) VALUES ($1, $2, (SELECT id FROM users WHERE username = $3), $4)`,
       [title, content, user, postId]
     );
+    // Refreshes the page to display the new comment (and any other added comments since last refresh)
     revalidatePath(`/posts/${postId}`);
   }
 
+  // Removes the post and all associated comments from the database
   async function handleDeletePost() {
     "use server";
+    // Deletes the comments before the post to avoid potential issues with database table referencing
     await handleDeleteComments();
     await db.query(`DELETE FROM posts WHERE id = $1`, [postId]);
+    // Redirects user to posts page once deletion has completed
     redirect("/posts");
 
+    // Removes the associated comments from database
     async function handleDeleteComments() {
       await db.query(`DELETE FROM comments WHERE post_id = $1`, [postId]);
     }
   }
 
   return (
-    <div className="mt-10 flex flex-col items-center">
+    <div className="mt-10 flex flex-col items-center overflow-x-hidden">
       <div className="w-5/6 bg-myblack my-5 px-10 py-5 rounded-3xl">
+        {/* Displays the specific post data */}
         {post.map((post) => {
           return (
             <div key={post.id}>
@@ -60,6 +70,7 @@ export default async function IndividualPostPage({ params }) {
                 <h3 className="text-myblue text-2xl sm:text-3xl md:text-4xl font-semibold order-last md:order-first">
                   {post.title}
                 </h3>
+                {/* CRUD option buttions for post */}
                 <div className="flex md:order-first mb-2 md:mb-0 max-w-fit">
                   <button className="bg-mygrey text-myblack rounded-xl md:rounded-full px-1 sm:px-2 py-1 hover:bg-myblue hover:shadow-lg hover:shadow-myblue/50 mr-5">
                     <Link href={`/posts/${postId}/edit`}>Edit Post</Link>
@@ -83,6 +94,7 @@ export default async function IndividualPostPage({ params }) {
         <h2 className="font-semibold text-3xl border-b-2 border-b-myblack mb-5">
           Comments
         </h2>
+        {/* Loops through the array of associated comments and renders each one to the page in alternating design */}
         <div className="bg-mygrey">
           {comments.map((comment) => {
             return (
@@ -108,6 +120,7 @@ export default async function IndividualPostPage({ params }) {
       </div>
       <div className="w-5/6 mt-5 px-10">
         <h2 className="font-semibold indent-2 mb-2">Add Comment</h2>
+        {/* Renders a form for users to add a comment directly on the post page for contextual input */}
         <form
           action={handleAddComment}
           className="flex flex-col bg-myblack px-6 py-4"

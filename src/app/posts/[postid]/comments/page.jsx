@@ -1,10 +1,13 @@
-export default function CommentsPage() {
+import { redirect } from "next/navigation";
+
+export default async function CommentsPage({ params }) {
+  const postId = (await params).postid;
   return (
     <div>
-      <h2>
-        This is the page for displaying ALL comments on a SPECIFIC (dynamically
-        routed) post
-      </h2>
+      {/* Unused route as comments are displayed directly on post page. 
+      Redirects to post page if visited */}
+      <h2>Error: Invalid route. Redirecting...</h2>
+      {redirect(`/posts/${postId}`)};
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+// Splash page
 export default function HomePage() {
   return (
     <div className="h-full flex flex-cols justify-center items-center bg-myblack">

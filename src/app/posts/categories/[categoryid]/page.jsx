@@ -1,10 +1,13 @@
 import { db } from "@/utils/db";
 import Link from "next/link";
+
+// Page that displays all posts in a specific category
 export default async function IndividualCategoryPage({ params, searchParams }) {
   const id = (await params).categoryid;
   const searchParam = await searchParams;
   const sort = searchParam.sort;
 
+  // Get all data for all posts in a specific category, along with category name and number of comments associated with each post.
   const result = await db.query(
     `SELECT
       posts.id, 
@@ -19,19 +22,25 @@ export default async function IndividualCategoryPage({ params, searchParams }) {
   );
   const posts = result.rows;
 
+  // Sorts posts in a way that retains order regardless of edits to posts
+  await posts.sort((a, b) => a.id - b.id);
+
+  // Sort posts by ascending or descending order depending on user choice
   if (sort == "asc") {
-    await posts.sort();
+    await posts.sort((a, b) => a.id - b.id);
   } else if (sort == "desc") {
-    await posts.sort().reverse();
+    await posts.sort((a, b) => b.id - a.id);
   }
 
   return (
-    <div>
+    // Disable horizontal scrollbar
+    <div className="overflow-x-hidden">
       <h2 className="text-mypink max-w-fit bg-myblack pb-2 px-4 rounded-br-lg">
         {posts[0].category}
       </h2>
       <div className="flex mt-5 justify-around py-2">
         <div className="flex">
+          {/* Sort posts by ascending or descending */}
           <h2 className="content-center mr-6 font-semibold">Sort posts by:</h2>
           <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 mr-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
             <Link href={`${id}?sort=asc`}>Ascending</Link>
@@ -40,10 +49,12 @@ export default async function IndividualCategoryPage({ params, searchParams }) {
             <Link href={`${id}?sort=desc`}>Descending</Link>
           </button>
         </div>
-        <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
+        {/* Create a new post */}
+        <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
           <Link href="../new">Create New Post</Link>
         </button>
       </div>
+      {/* Map through each post in posts array and render to screen with alternating design */}
       <div className="flex flex-col items-center">
         {posts.map((post) => {
           return (
@@ -61,6 +72,7 @@ export default async function IndividualCategoryPage({ params, searchParams }) {
               </div>
               <p className="text-mygrey">{post.content}</p>
               <div className="text-mypink text-right">
+                {/* Conditionally display correct grammar depending on number of comments on a post */}
                 {post.commentcount == 1 && <p>1 comment</p>}
                 {post.commentcount != 1 && <p>{post.commentcount} comments</p>}
               </div>

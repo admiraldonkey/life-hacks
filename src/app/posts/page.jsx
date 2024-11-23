@@ -6,7 +6,7 @@ export default async function PostsPage({ searchParams }) {
   const searchParam = await searchParams;
   const sort = searchParam.sort;
 
-  // With thanks to https://stackoverflow.com/questions/7247902/sql-get-all-records-from-one-table-and-a-count-of-records-from-a-second-table
+  // Get all post data, along with associated category name and number of comments associated with each post.
   const result = await db.query(`
   SELECT 
     posts.id, 
@@ -16,31 +16,38 @@ export default async function PostsPage({ searchParams }) {
     (SELECT count(id) FROM comments WHERE posts.id = comments.post_id) as commentcount 
   FROM posts
   JOIN categories ON posts.category_id = categories.id`);
-
   const posts = result.rows;
 
+  // Sorts posts in a way that retains order regardless of edits to posts
+  await posts.sort((a, b) => a.id - b.id);
+
+  // Sort posts by ascending or descending order depending on user choice
   if (sort == "asc") {
-    await posts.sort();
+    await posts.sort((a, b) => a.id - b.id);
   } else if (sort == "desc") {
-    await posts.sort().reverse();
+    await posts.sort((a, b) => b.id - a.id);
   }
 
   return (
-    <div>
+    // Disable horizontal scrollbar
+    <div className="overflow-x-hidden">
       <div className="flex mt-5 justify-around py-2">
         <div className="flex">
-          <h2 className="content-center mr-6 font-semibold">Sort posts by:</h2>
+          {/* Sort posts by ascending or descending */}
+          <h2 className="content-center mr-6 font-semibold">Sort posts:</h2>
           <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 mr-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
-            <Link href="/posts?sort=asc">Ascending</Link>
+            <Link href="/posts?sort=asc">Oldest First</Link>
           </button>
           <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
-            <Link href="/posts?sort=desc">Descending</Link>
+            <Link href="/posts?sort=desc">Newest First</Link>
           </button>
         </div>
-        <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
+        {/* Create a new post */}
+        <button className="bg-myblack text-myblue rounded-lg md:rounded-full text-xl px-2 py-1 md:text-2xl md:px-4 md:py-2 border-2 hover:text-myblack hover:bg-myblue hover:border-2 hover:border-myblack">
           <Link href="/posts/new">Create New Post</Link>
         </button>
       </div>
+      {/* Map through each post in posts array and render to screen with alternating design */}
       <div className="flex flex-col items-center">
         {posts.map((post) => {
           return (
@@ -61,6 +68,7 @@ export default async function PostsPage({ searchParams }) {
               </h5>
               <p className="text-mygrey ">{post.content}</p>
               <div className="text-mypink text-right">
+                {/* Conditionally display correct grammar depending on number of comments on a post */}
                 {post.commentcount == 1 && <p>1 comment</p>}
                 {post.commentcount != 1 && <p>{post.commentcount} comments</p>}
               </div>
