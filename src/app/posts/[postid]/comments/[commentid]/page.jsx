@@ -2,10 +2,12 @@ import { db } from "@/utils/db";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+// Page that displays a form for users to edit a specific comment
 export default async function EditInvidivualComment({ params }) {
   const postId = (await params).postid;
   const commentId = (await params).commentid;
 
+  // Retrieves all data for the relevant post
   const postResponse = await db.query(
     `SELECT
       posts.id, 
@@ -19,14 +21,15 @@ export default async function EditInvidivualComment({ params }) {
   );
   const post = postResponse.rows;
 
+  // Retrieve all data for the specified post
   const commentResponse = await db.query(
     `SELECT * FROM comments WHERE id = ${commentId}`
   );
   const comment = commentResponse.rows;
 
+  // Updates the correct entry in the database with current data in the form
   async function handleUpdateComment(formData) {
     "use server";
-    console.log(formData);
     const title = formData.get("title");
     const content = formData.get("content");
     await db.query(
@@ -39,6 +42,7 @@ export default async function EditInvidivualComment({ params }) {
   return (
     <div className="mt-10 flex flex-col items-center">
       <h2 className="font-semibold text-3xl">Commenting on post</h2>
+      {/* Displays the post related to the comment so the user has context for editing the comment */}
       <div className="w-5/6 bg-myblack my-5 px-10 py-5 rounded-3xl">
         <h3 className="text-myblue text-2xl sm:text-3xl md:text-4xl font-semibold mb-2">
           {post[0].title}
@@ -50,6 +54,7 @@ export default async function EditInvidivualComment({ params }) {
       </div>
       <div className="w-5/6 my-5 px-10">
         <h2 className="font-semibold indent-2 mb-2">Edit Comment</h2>
+        {/* Form for editing the comment. Values automatically populated with current comment data */}
         <form
           action={handleUpdateComment}
           className="flex flex-col bg-myblack px-6 py-4"

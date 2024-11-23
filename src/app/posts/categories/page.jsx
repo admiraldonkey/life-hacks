@@ -3,6 +3,7 @@ import { db } from "@/utils/db";
 
 // Page that displays all available categories
 export default async function CategoriesPage() {
+  // Retrieves all available categories from database
   const result = await db.query(`SELECT * FROM categories`);
   const categories = result.rows;
 
@@ -12,6 +13,7 @@ export default async function CategoriesPage() {
         Choose a category to view associated posts
       </h2>
       <div className="w-3/6 flex flex-col md:flex-row flex-wrap mt-5 justify-around items-center py-10 border-2 border-myblue bg-myblue/20 mb-40">
+        {/* Loops through categories and displays each on page */}
         {categories.map((category) => {
           return (
             <div
